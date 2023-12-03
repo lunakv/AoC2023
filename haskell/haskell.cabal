@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      Day02
+      Day03
       Lib
   other-modules:
       Paths_haskell
@@ -40,7 +42,6 @@ library
 executable haskell-exe
   main-is: Main.hs
   other-modules:
-      Day02
       Paths_haskell
   autogen-modules:
       Paths_haskell

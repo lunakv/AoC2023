@@ -15,6 +15,7 @@ readCount s = case words s of
   i:"red":_ -> Count (read i) 0 0
   i:"green":_ -> Count 0 (read i) 0
   i:"blue":_ -> Count 0 0 (read i)
+  _ -> Count 0 0 0
   
 score :: Num a => a -> Count -> a
 score i (Count a b c) = if a <= 12 && b <= 13 && c <= 14 then i else 0
