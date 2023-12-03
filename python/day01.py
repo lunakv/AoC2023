@@ -8,15 +8,11 @@ def convert(n):
         return numbers.index(n) + 1
     return int(n)
 
-total = 0
-while True:
-    try:
-        matches = [m.group(1) for m in re.finditer(regexp, input())]
+def run(file):
+    total = 0
+    for line in file.split('\n'):
+        matches = [m.group(1) for m in re.finditer(regexp, line)]
         first, last = [convert(n) for n in (matches[0], matches[-1])]
         total += 10 * first + last
-    except:
-        print(total)
-        break
-
-
+    print(total)
 

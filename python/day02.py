@@ -10,19 +10,18 @@ def max_pull(pulls):
             m[key] = max(m[key], c[key])
     return m
 
-limits = {"red":12, "green":13, "blue":14}
-i = 0
-total = 0
-power = 0
-while True:
-    try:
+def run(file):
+    limits = {"red":12, "green":13, "blue":14}
+    i = 0
+    total = 0
+    power = 0
+    for line in file.split('\n'):
         i += 1
-        line = input().split(": ")[1]
+        line = line.split(": ")[1]
         m = max_pull(get_counts(turn) for turn in line.split("; "))
         if all(m[k] <= limits[k] for k in limits):
             total += i
         power += prod(m.values())
-    except:
-        print(total)
-        print(power)
-        break
+    print(total)
+    print(power)
+

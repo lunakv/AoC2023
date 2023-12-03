@@ -2,10 +2,6 @@ import re
 from math import prod
 from collections import defaultdict
 
-with open("../inputs/03/input.txt") as f:
-    board = [l.strip() for l in f.readlines()]
-
-board.append('.'*len(board[0]))
 
 def get_symbols(string):
     return list(re.finditer(r'[^\d.]+', string))
@@ -32,6 +28,7 @@ def find_overlaps(numbers, symbols):
                 break
             if cmp == 1:
                 break
+            i += 1
 
 def parse_board(board):
     number_map, symbol_map = defaultdict(set), defaultdict(set)
@@ -52,11 +49,13 @@ def parse_board(board):
         symbols_on_line = symbols_below
     return number_map, symbol_map
 
-if __name__ == "__main__":
+def run(file):
+    board = [l.strip() for l in file.split('\n')]
+    board.append('.'*len(board[0]))
+
     numbers, symbols = parse_board(board)
     total = sum(nk[2] for nk in numbers.keys())
     print(total)
 
     gear_ratios = sum(prod(nk[2] for nk in symbols[g]) for g in symbols if g[2] == '*' and len(symbols[g]) == 2)
     print(gear_ratios)
-

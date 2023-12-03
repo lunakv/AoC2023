@@ -53,5 +53,5 @@ generateNeighbors lst = case lst of
 run :: IO String -> IO ()
 run input = do
   neighbors <- generateNeighbors . ([] :) . map (tokenize . zip [1..]) . lines <$> input
-  print $ sum . map (getValue . fst) $ neighbors
-  print $ sum . map prod . filter ((== 2) . length) . map snd . filter (isGear . fst) $ neighbors
+  print . sum . map (getValue . fst) $ neighbors
+  print . sum . map prod . filter ((== 2) . length) . map snd . filter (isGear . fst) $ neighbors
