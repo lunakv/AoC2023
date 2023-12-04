@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import os
 import re
@@ -9,9 +10,12 @@ def pad(day):
     return day if len(day) > 1 else "0" + day
 
 def get_file(day, inp):
-    with open(f'{this_dir}/../inputs/{day}/{inp}.txt') as f:
-        file = f.read().strip()
-    return file
+    try:
+        with open(f'{this_dir}/../inputs/{day}/{inp}.txt') as f:
+            file = f.read().strip()
+        return file
+    except:
+        return None
 
 def parse_opts():
     opts = {"mode": "basic", "input": "input", "day": "latest"}
@@ -54,7 +58,10 @@ def dispatch(day, kind):
     inp = get_file(day, kind)
     module = importlib.import_module(f"day{day}", this_dir)
     print(f'==== Day {day} ====')
-    module.run(inp)
+    if inp:
+        module.run(inp)
+    else:
+        print('Input not available for day', day)
     print()
     
 
