@@ -42,7 +42,7 @@ def part_2(seeds, maps):
                 rem.extend(remaining)
             src = rem
         
-    return min(s for s, e in src)
+    return min(s for s, e in dst)
 
 def run(file):
     seeds, *maps = file.split('\n\n')
