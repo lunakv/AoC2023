@@ -25,22 +25,23 @@ def split(range_a, range_b):
     return (s_i, e_i), remaining
 
 def part_2(seeds, maps):
-    src = seeds
+    rem = seeds
     dst = []
     for block in maps:
+        src, dst = dst + rem, []
         for line in block:
             rem = []
             dst_start, src_start, length = [int(i) for i in line.split()]
             src_interval = (src_start, src_start + length - 1)
             delta = dst_start - src_start
-            for i, source in enumerate(src):
+            for source in src:
                 inter, remaining = split(source, src_interval)
                 if inter is not None:
                     s, e = inter
                     dst.append((s + delta, e + delta))
                 rem.extend(remaining)
             src = rem
-        src, dst = dst + rem, []
+        
     return min(s for s, e in src)
 
 def run(file):
