@@ -63,13 +63,16 @@ def dispatch(day, kind):
     else:
         print('Input not available for day', day)
     print()
+    module.run(inp)
     
 
 def main():
     opts = parse_opts()
     days = get_days(opts)
-    for day in days:
-        dispatch(day, opts["input"])
+    for i in range(len(days)):
+        dispatch(days[i], opts["input"])
+        if i < len(days) - 1:
+            print()
 
 if __name__ == "__main__":
     main()
