@@ -29,11 +29,6 @@ def run(file):
     print(search(field, 'AAA', lambda s: s == 'ZZZ'))
     
     # Part 2
-    states = [x for x in paths if x[-1] == 'A']
-    lcm = 1
-    for start in states:
-        length = search(field, start, lambda s: s[-1] == 'Z')
-        lcm = lcm * length // math.gcd(lcm, length)
-        
-    print(lcm)
+    starts = filter(lambda x: x[-1] == 'A', paths.keys())
+    print(math.lcm(*[search(field, start, lambda s: s[-1] == 'Z') for start in starts]))
 
