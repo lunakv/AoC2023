@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import importlib
+import time
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -53,18 +54,33 @@ def get_days(opts):
     else:
         return [day]
 
+def format_time(span):
+    suffixes = ['ns', 'us', 'ms', 's']
+    i = 0
+    while span > 1000 and i < len(suffixes):
+        span //= 1000
+        i += 1
+    suffix = suffixes[i]
+    if suffix == 's' and span > 120:
+        m, s = divmod(span, 60)
+        return f"{m}m{s}s"
+    else:
+        return f"{span}{suffix}"
+
+
 def dispatch(day, kind):
     day = pad(day)
     inp = get_file(day, kind)
     module = importlib.import_module(f"day{day}", this_dir)
     print(f'==== Day {day} ====')
     if inp:
+        start = time.perf_counter_ns()
         module.run(inp)
+        end = time.perf_counter_ns()
+        print('Finished in', format_time(end - start))
     else:
         print('Input not available for day', day)
     print()
-    module.run(inp)
-    
 
 def main():
     opts = parse_opts()
