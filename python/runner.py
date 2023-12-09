@@ -80,7 +80,6 @@ def dispatch(day, kind):
         print('Finished in', format_time(end - start))
     else:
         print('Input not available for day', day)
-    print()
 
 def main():
     opts = parse_opts()
