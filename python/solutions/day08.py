@@ -18,9 +18,7 @@ def search(field, start, end_cond):
         step += 1
     return step
 
-
-def run(file):
-    lines = file.split('\n')
+def run(lines):
     steps = [0 if c == 'L' else 1 for c in lines[0]]
     paths = parse(lines[2:])
     field = (paths, steps)

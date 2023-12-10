@@ -1,7 +1,7 @@
 face_cards = ['T', 'J', 'Q', 'K', 'A']
 
-def parse_line(line):
-    cards, bet = line.split()
+def parse_line(tokens):
+    cards, bet = tokens
     bet = int(bet)
     cards = [face_cards.index(c) + 10 if c in face_cards else int(c) for c in cards]
     return cards, bet
@@ -32,8 +32,9 @@ def replace_jokers(hand):
 def score(hands):
     return sum(i * bet for i, (_, bet) in enumerate(hands, start=1))
 
-def run(file):
-    hands = sorted(map(parse_line, file.split('\n')), key=hand_key)
+def run(splitlines):
+    hands = sorted(map(parse_line, splitlines), key=hand_key)
     print(score(hands))
     hands = sorted(map(replace_jokers, hands), key=hand_key)
     print(score(hands))
+

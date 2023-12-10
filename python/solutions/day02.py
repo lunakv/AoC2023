@@ -10,12 +10,12 @@ def max_pull(pulls):
             m[key] = max(m[key], c[key])
     return m
 
-def run(file):
+def run(lines):
     limits = {"red":12, "green":13, "blue":14}
     i = 0
     total = 0
     power = 0
-    for line in file.split('\n'):
+    for line in lines:
         i += 1
         line = line.split(": ")[1]
         m = max_pull(get_counts(turn) for turn in line.split("; "))

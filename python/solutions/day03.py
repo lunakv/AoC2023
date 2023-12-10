@@ -2,7 +2,6 @@ import re
 from math import prod
 from collections import defaultdict
 
-
 def get_symbols(string):
     return list(re.finditer(r'[^\d.]+', string))
 
@@ -49,13 +48,13 @@ def parse_board(board):
         symbols_on_line = symbols_below
     return number_map, symbol_map
 
-def run(file):
-    board = [l.strip() for l in file.split('\n')]
-    board.append('.'*len(board[0]))
+def run(lines):
+    lines.append('.'*len(lines[0]))
 
-    numbers, symbols = parse_board(board)
+    numbers, symbols = parse_board(lines)
     total = sum(nk[2] for nk in numbers.keys())
     print(total)
 
     gear_ratios = sum(prod(nk[2] for nk in symbols[g]) for g in symbols if g[2] == '*' and len(symbols[g]) == 2)
     print(gear_ratios)
+

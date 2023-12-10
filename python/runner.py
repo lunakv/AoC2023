@@ -4,6 +4,11 @@ import os
 import re
 import importlib
 import time
+import inspect
+import pkgutil
+
+import solutions
+from utils import parser
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,12 +16,14 @@ def pad(day):
     return day if len(day) > 1 else "0" + day
 
 def get_file(day, inp):
-    try:
-        with open(f'{this_dir}/../inputs/{day}/{inp}.txt') as f:
-            file = f.read().strip()
-        return file
-    except:
-        return None
+    for name in (inp, f'{inp}.txt'):
+        try:
+            with open(f'{this_dir}/../inputs/{day}/{name}') as f:
+                file = f.read()
+            return file
+        except:
+            pass
+    return None
 
 def parse_opts():
     opts = {"mode": "basic", "input": "input", "day": "latest"}
@@ -33,10 +40,10 @@ def parse_opts():
     return opts
 
 def get_solved_days():
-    files = os.listdir(this_dir)
+    modules = (name for _, name, pkg in pkgutil.iter_modules(solutions.__path__) if not pkg)
     days = []
-    for file in files:
-        m = re.fullmatch(r'day(\d\d)\.py', file)
+    for module in modules:
+        m = re.fullmatch(r'day(\d\d)', module)
         if m:
             days.append(m.group(1))
     return sorted(days)
@@ -67,15 +74,19 @@ def format_time(span):
     else:
         return f"{span}{suffix}"
 
+def input_args(runner, file):
+    args = inspect.getfullargspec(runner).args
+    return {arg: parser.parse(file, arg) for arg in args}
+    
 
 def dispatch(day, kind):
     day = pad(day)
-    inp = get_file(day, kind)
-    module = importlib.import_module(f"day{day}", this_dir)
+    file = get_file(day, kind)
+    module = importlib.import_module(f"solutions.day{day}")
     print(f'==== Day {day} ====')
-    if inp:
+    if file:
         start = time.perf_counter_ns()
-        module.run(inp)
+        module.run(**input_args(module.run, file))
         end = time.perf_counter_ns()
         print('Finished in', format_time(end - start))
     else:

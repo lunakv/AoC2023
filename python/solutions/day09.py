@@ -1,10 +1,7 @@
-
-def run(file):
-    lines = [[int(d) for d in l.split()] for l in file.split('\n')]
-
+def run(intlines):
     part_1 = 0
     part_2 = 0
-    for line in lines:
+    for line in intlines:
         last, first = 0, 0
         sign = 1
         diffs = line

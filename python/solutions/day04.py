@@ -7,9 +7,7 @@ def add_counts(cards, start, winning):
     for i in range(start + 1, min(start + winning + 1, len(cards))):
         cards[i] += cards[start]
 
-
-def run(file):
-    lines = file.split('\n')
+def run(lines):
     total = 0
     cards = [1] * len(lines)
     for i, line in enumerate(lines):
@@ -24,3 +22,4 @@ def run(file):
 
     print(total)
     print(sum(cards))
+
