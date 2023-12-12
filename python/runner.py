@@ -65,14 +65,16 @@ def format_time(span):
     suffixes = ['ns', 'us', 'ms', 's']
     i = 0
     while span > 1000 and i < len(suffixes):
-        span //= 1000
+        span, rem = divmod(span, 1000)
         i += 1
     suffix = suffixes[i]
     if suffix == 's' and span > 120:
         m, s = divmod(span, 60)
-        return f"{m}m{s}s"
+        return f"{m} m {s} s"
+    elif suffix == 's' and span < 10:
+        return f"{span}.{rem // 100} s"
     else:
-        return f"{span}{suffix}"
+        return f"{span} {suffix}"
 
 def input_args(runner, file):
     args = inspect.getfullargspec(runner).args
