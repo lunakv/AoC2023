@@ -8,7 +8,15 @@ def convert(n):
         return numbers.index(n) + 1
     return int(n)
 
-def run(lines):
+def run(lines, timer):
+    total = 0
+    for line in lines:
+        digits = re.findall(r"\d", line)
+        total += 10 * int(digits[0]) + int(digits[-1])
+    print(total)
+
+    timer.tick()
+
     total = 0
     for line in lines:
         matches = [m.group(1) for m in re.finditer(regexp, line)]
