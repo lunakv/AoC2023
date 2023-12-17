@@ -32,9 +32,10 @@ def replace_jokers(hand):
 def score(hands):
     return sum(i * bet for i, (_, bet) in enumerate(hands, start=1))
 
-def run(splitlines):
+def run(splitlines, timer):
     hands = sorted(map(parse_line, splitlines), key=hand_key)
     print(score(hands))
+    timer.tick()
     hands = sorted(map(replace_jokers, hands), key=hand_key)
     print(score(hands))
 

@@ -86,7 +86,7 @@ def walk_loop(sx, sy, field, callback):
     return loop
 
 
-def run(lines):
+def run(lines, timer):
     sx, sy = find_start(lines)
     # Determine the overall direction of the loop
     clockwise_turns = 0
@@ -101,6 +101,7 @@ def run(lines):
     # Part 1 
     print(len(loop) // 2)
 
+    timer.tick()
     # Mark tiles that are on the inside of any loop segment
     inside_turn = rotate_clockwise if clockwise_turns > 0 else rotate_counterclockwise
     marked_inside = set()

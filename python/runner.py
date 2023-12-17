@@ -8,7 +8,7 @@ import inspect
 import pkgutil
 
 import solutions
-from utils import parser
+from utils import parser, timing
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -61,23 +61,15 @@ def get_days(opts):
     else:
         return [day]
 
-def format_time(span):
-    suffixes = ['ns', 'us', 'ms', 's']
-    i = 0
-    while span > 1000 and i < len(suffixes):
-        span, rem = divmod(span, 1000)
-        i += 1
-    suffix = suffixes[i]
-    if suffix == 's' and span > 120:
-        m, s = divmod(span, 60)
-        return f"{m} m {s} s"
-    elif suffix == 's' and span < 10:
-        return f"{span}.{rem // 100} s"
-    else:
-        return f"{span} {suffix}"
-
-def input_args(runner, file):
+def input_args(runner, file, timer):
     args = inspect.getfullargspec(runner).args
+    filled_args = {}
+    for arg in args:
+        if arg == 'timer':
+            filled_args[arg] = timer
+        else:
+            filled_args[arg] = parser.parse(file, arg)
+    return filled_args
     return {arg: parser.parse(file, arg) for arg in args}
     
 
@@ -87,10 +79,12 @@ def dispatch(day, kind):
     module = importlib.import_module(f"solutions.day{day}")
     print(f'==== Day {day} ====')
     if file:
-        start = time.perf_counter_ns()
-        module.run(**input_args(module.run, file))
-        end = time.perf_counter_ns()
-        print('Finished in', format_time(end - start))
+        timer = timing.Timer()
+        args = input_args(module.run, file, timer)
+        timer.tick()
+        module.run(**args)
+        timer.tick()
+        print('Finished in', timer)
     else:
         print('Input not available for day', day)
 

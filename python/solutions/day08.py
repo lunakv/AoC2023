@@ -18,7 +18,7 @@ def search(field, start, end_cond):
         step += 1
     return step
 
-def run(lines):
+def run(lines, timer):
     steps = [0 if c == 'L' else 1 for c in lines[0]]
     paths = parse(lines[2:])
     field = (paths, steps)
@@ -26,6 +26,7 @@ def run(lines):
     # Part 1
     print(search(field, 'AAA', lambda s: s == 'ZZZ'))
     
+    timer.tick()
     # Part 2
     starts = filter(lambda x: x[-1] == 'A', paths.keys())
     print(math.lcm(*[search(field, start, lambda s: s[-1] == 'Z') for start in starts]))

@@ -36,10 +36,12 @@ class Grid:
 def count_places(visited):
     return len(set((v[0], v[1]) for v in visited))
 
-def run(lines):
+def run(lines, timer):
     grid = Grid(lines)
     visited = dfs((0, 0, 'right'), grid.get_next)
     print(count_places(visited))
+
+    timer.tick()
 
     opposite_starts = set() # entry points with starting directions reversed
     for i in range(grid.height):

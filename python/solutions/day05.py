@@ -44,13 +44,14 @@ def part_2(seeds, maps):
         
     return min(s for s, e in dst)
 
-def run(blocks):
+def run(blocks, timer):
     (seeds, *_), *maps = blocks
 
     seeds = [int(s) for s in seeds.split(': ')[1].split()]
     maps = [m[1:] for m in maps]
-
     print(part_1(seeds, maps))
+
+    timer.tick()
     seeds = [(seeds[i], seeds[i] + seeds[i+1] - 1) for i in range(0, len(seeds), 2)]
     print(part_2(seeds, maps))
 

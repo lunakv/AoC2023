@@ -52,8 +52,11 @@ def get_score(grid):
         total += (len(grid)-i) * sum(c == 'O' for c in row)
     return total
 
-def run(file):
+def run(file, timer):
     grid = parse(file)
     print(get_score(tilt_up(grid)))
+
+    timer.tick()
+
     grid = parse(file)
     print(get_score(repeated_cycle(grid, 1_000_000_000)))

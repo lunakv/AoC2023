@@ -19,7 +19,8 @@ def get_block_score(block, expected_difference):
 def transpose(field):
     return [[field[j][i] for j in range(len(field))] for i in range(len(field[0]))]
 
-def run(blocks):
+def run(blocks, timer):
     total = 0
-    for i in (0, 1):
-        print(sum(get_block_score(b, i) for b in blocks))
+    print(sum(get_block_score(b, 0) for b in blocks))
+    timer.tick()
+    print(sum(get_block_score(b, 1) for b in blocks))
