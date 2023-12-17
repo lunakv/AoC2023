@@ -85,7 +85,8 @@ class Crucible:
         self.width = len(self.grid[0])
 
     def starts(self):
-        return [[self.grid[0][1], (0, 1, 'R')], [self.grid[1][0], (1, 0, 'D')]]
+        # [[edge_length, (x, y, direction, path_length)]]
+        return [[self.grid[0][1], (0, 1, 'R', 1)], [self.grid[1][0], (1, 0, 'D', 1)]]
 
     def is_end(self, item):
         return item[0] == self.height - 1 and item[1] == self.width - 1
@@ -94,38 +95,37 @@ class Crucible:
         return 0 <= x < self.height and 0 <= y < self.width
 
     def neighbors(self, step):
-        x, y, path = step
-        for new_path in self._next_paths(path):
-            dx, dy = Crucible.steps[new_path[0]]
+        x, y, direction, length = step
+        for new_dir, new_len in self._next_paths(direction, length):
+            dx, dy = Crucible.steps[new_dir]
             nx, ny = x + dx, y + dy
             if self.inside_grid(nx, ny):
-                yield self.grid[nx][ny], (nx, ny, new_path)
+                yield self.grid[nx][ny], (nx, ny, new_dir, new_len)
 
-    def _next_paths(self, path):
-        direction = path[0]
-        if self._can_step_forward(path):
-            yield path + direction
-        if self._can_step_sideways(path):
+    def _next_paths(self, direction, length):
+        if self._can_step_forward(direction, length):
+            yield direction, length + 1
+        if self._can_step_sideways(direction, length):
             right = (Crucible.dirs.index(direction) + 1) % 4
             left = (Crucible.dirs.index(direction) + 3) % 4
-            yield Crucible.dirs[right]
-            yield Crucible.dirs[left]
+            yield Crucible.dirs[right], 1
+            yield Crucible.dirs[left], 1
 
-    def _can_step_forward(self, path):
-        return len(path) < 3
+    def _can_step_forward(self, direction, length):
+        return length < 3
 
-    def _can_step_sideways(self, path):
+    def _can_step_sideways(self, direction, length):
         return True
 
 class UberCrucible(Crucible):
     def is_end(self, item):
-        return super().is_end(item) and self._can_step_sideways(item[2])
+        return super().is_end(item) and self._can_step_sideways(item[2], item[3])
 
-    def _can_step_forward(self, path):
-        return len(path) < 10
+    def _can_step_forward(self, direction, length):
+        return length < 10
 
-    def _can_step_sideways(self, path):
-        return len(path) >= 4
+    def _can_step_sideways(self, direction, length):
+        return length >= 4
 
 
 def dijkstra(starts, is_end, neighbors):
